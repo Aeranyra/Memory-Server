@@ -44,7 +44,7 @@ function setScene(data) {
     skipTyping = true;
 
     choicesBox.innerHTML = "";
-    endButtons.innerHTML = "";   // ✅ ADD THIS (IMPORTANT)
+    endButtons.innerHTML = "";
     text.innerText = "";
     letterBox.innerText = "";
     letterBox.style.opacity = "0";
@@ -251,7 +251,6 @@ function showEnding(titleText, endingText, type) {
 
     });
 }
-        
 function showEndButtons(type) {
 
     const endButtons = document.getElementById("endButtons");
