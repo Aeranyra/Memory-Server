@@ -231,6 +231,7 @@ function end3(){ showEnding("Missing Packet","No response.\nOnly memory remains.
 
 /* 🕯️ ENDING ENGINE */
 function showEnding(titleText, endingText, type) {
+function showEnding(titleText, endingText, type) {
 
     const endingBG = [
         "https://files.catbox.moe/5sqlba.jpg",
@@ -247,16 +248,22 @@ function showEnding(titleText, endingText, type) {
 
     typeText(text, endingText, () => {
 
-        showChoices([{ text: "Restart Memory", next: prologue }]);
+        showChoices([
+            { text: "Restart Memory", next: prologue },
+            { text: "Open Hidden Letter", next: () => showLetter(type) }
+        ]);
 
-        setTimeout(() => {
-    if (!letterBox.innerText || letterBox.innerText.length === 0) {
-        showLetter(type);
-    }
-}, 1800);
+    });
+}
 
 /* ✉️ LETTER */
 function showLetter(type) {
+
+    /* 🧹 CLEAR ENDING UI */
+    choicesBox.innerHTML = "";
+    text.innerText = "";
+    chapter.innerText = "";
+    title.innerText = "";
 
     const letterBox = document.getElementById("letter");
 
@@ -297,8 +304,7 @@ don’t think of it as goodbye.
 
 Think of it as me
 still existing inside your memory…
-
-where I never really left.`
+slowly unfolding.`
     ];
 
     letterBox.innerText = "";
@@ -306,8 +312,7 @@ where I never really left.`
 
     fadeMusic(0.15);
 
-    const lines = letters[type - 1].split("\n");
-
+    let lines = letters[type - 1].split("\n");
     let i = 0;
 
     function unfold() {
@@ -318,7 +323,7 @@ where I never really left.`
         }
     }
 
-    setTimeout(unfold, 1200);
+    setTimeout(unfold, 800);
 }
 
 /* START */
