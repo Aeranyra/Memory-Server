@@ -8,7 +8,7 @@ const choicesBox = document.getElementById("choices");
 const music = document.getElementById("music");
 const fade = document.getElementById("fade");
 const letterBox = document.getElementById("letter");
-
+const endButtons = document.getElementById("endButtons");
 let isTyping = false;
 let skipTyping = false;
 
@@ -247,11 +247,31 @@ function showEnding(titleText, endingText, type) {
 
     typeText(text, endingText, () => {
 
-        showChoices([
-            { text: "Restart Memory", next: prologue },
-            { text: "Open Hidden Letter", next: function () { showLetter(type); } }
-        ]);
+        showEndButtons(type);
+        
+function showEndButtons(type) {
 
+    endButtons.innerHTML = "";
+
+    const restartBtn = document.createElement("div");
+    restartBtn.className = "endBtn";
+    restartBtn.innerText = "Restart Memory";
+    restartBtn.onclick = () => {
+        endButtons.innerHTML = "";
+        prologue();
+    };
+
+    const letterBtn = document.createElement("div");
+    letterBtn.className = "endBtn";
+    letterBtn.innerText = "Open Hidden Letter";
+    letterBtn.onclick = () => {
+        endButtons.innerHTML = "";
+        showLetter(type);
+    };
+
+    endButtons.appendChild(restartBtn);
+    endButtons.appendChild(letterBtn);
+}
     });
 }
 /* ✉️ LETTER */
