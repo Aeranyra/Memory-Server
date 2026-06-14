@@ -2,53 +2,88 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const bg = document.getElementById("bg");
 const chapter = document.getElementById("chapter");
-const textBox = document.getElementById("text");
+const title = document.getElementById("title");
+const text = document.getElementById("text");
 const choicesBox = document.getElementById("choices");
 const music = document.getElementById("music");
 const fade = document.getElementById("fade");
+const letterBox = document.getElementById("letter");
 
-/* 🎧 MUSIC (your track) */
+/* 🎧 MUSIC */
 music.src = "https://files.catbox.moe/kpq69l.mp3";
 music.loop = true;
-music.volume = 0.5;
+music.volume = 0;
+
+/* 🎧 FADE SYSTEM */
+let targetVolume = 0.5;
+let fadeInterval;
+
+function fadeMusic(to) {
+    clearInterval(fadeInterval);
+
+    fadeInterval = setInterval(() => {
+        music.volume += (to - music.volume) * 0.05;
+
+        if (Math.abs(music.volume - to) < 0.01) {
+            music.volume = to;
+            clearInterval(fadeInterval);
+        }
+    }, 50);
+}
+
+/* 🦋 BUTTERFLY */
+document.addEventListener("mousemove", (e) => {
+    const b = document.createElement("div");
+    b.className = "butterfly";
+    b.style.left = e.pageX + "px";
+    b.style.top = e.pageY + "px";
+    document.body.appendChild(b);
+    setTimeout(() => b.remove(), 1000);
+});
+
+/* 🎧 START MUSIC */
+document.addEventListener("click", () => {
+    music.play().catch(()=>{});
+    fadeMusic(targetVolume);
+}, { once: true });
 
 /* 🌌 SCENE */
-function setScene(title, img) {
+function setScene(data) {
 
     fade.style.opacity = 1;
 
     setTimeout(() => {
 
-        chapter.innerText = title;
-        chapter.style.opacity = 1;
-        chapter.style.transform = "translateY(0)";
+        chapter.innerText = data.chapter;
+        title.innerText = data.title;
+        text.innerText = "";
 
-        bg.style.backgroundImage = `url(${img})`;
-        bg.style.transform = "scale(1.08)";
+        bg.style.backgroundImage = `url(${data.bg})`;
+
+        targetVolume = data.volume ?? 0.5;
+        fadeMusic(targetVolume);
 
         fade.style.opacity = 0;
 
-    }, 600);
+    }, 400);
 }
 
 /* ⌨️ TYPE */
-function typeText(text, cb) {
+function typeText(target, txt, cb) {
 
-    textBox.innerHTML = "";
+    target.innerText = "";
 
     let i = 0;
 
-    function type() {
-        if (i < text.length) {
-            textBox.innerHTML += text[i];
+    function run() {
+        if (i < txt.length) {
+            target.innerText += txt[i];
             i++;
-            setTimeout(type, 16);
-        } else {
-            if (cb) cb();
-        }
+            setTimeout(run, 15);
+        } else cb?.();
     }
 
-    type();
+    run();
 }
 
 /* 💬 CHOICES */
@@ -62,103 +97,128 @@ function showChoices(list) {
 
             const d = document.createElement("div");
             d.className = "choice";
-            d.innerText = c.text;
+
+            d.innerHTML = `
+                <div>${c.text}</div>
+                <small style="opacity:0.6">${c.note || ""}</small>
+            `;
+
             d.onclick = c.next;
 
             choicesBox.appendChild(d);
-
-            setTimeout(() => {
-                d.style.opacity = 1;
-                d.style.transform = "translateY(0)";
-            }, 50);
 
         }, i * 120);
 
     });
 }
 
-/* 🎮 STORY START (FIXED AUTOPLAY) */
-function start() {
+/* 🌙 PROLOGUE */
+function prologue() {
 
-    document.addEventListener("click", () => {
-        music.play().catch(()=>{});
-    }, { once: true });
+    setScene({
+        chapter: "PROLOGUE",
+        title: "The Lobby You Never Left",
+        bg: "https://files.catbox.moe/dkf0xz.jpg",
+        volume: 0.4
+    });
 
-    setScene("CHAPTER I — YOU OPENED THIS",
-    "https://files.catbox.moe/dkf0xz.jpg");
-
-    typeText("Hey…\nIf you opened this, you're in WWM.", () => {
+    typeText(text, "Hey… you’re still here in WWM.", () => {
 
         showChoices([
-            { text: "I miss you.", next: ch2 },
-            { text: "I just clicked.", next: ch2 }
+            { text: "I remember.", note: "faint recognition", next: chapter1 },
+            { text: "I forgot.", note: "empty feeling", next: chapter1 }
         ]);
 
     });
 }
 
-/* 🌙 CHAPTERS */
+/* 🕯️ CHAPTERS (SHORTENED FOR SPACE) */
+function chapter1(){ setScene({chapter:"CH1",title:"You Opened This",bg:"https://files.catbox.moe/dkf0xz.jpg",volume:0.5});
+typeText(text,"If you opened this… you were looking for me.",()=>{showChoices([{text:"I miss you",note:"soft",next:end1},{text:"I clicked",note:"denial",next:end2}]);});}
 
-function ch2() {
+/* 🌙 ENDINGS */
+function end1(){ showEnding("Stay in Queue","You stayed.\nSo I stayed too.",1); }
+function end2(){ showEnding("Disconnected","You left.\nBut I’m still here.",2); }
+function end3(){ showEnding("Missing Packet","No response.\nOnly memory remains.",3); }
 
-    setScene("CHAPTER II — OUR CO-OP WORLD",
-    "https://files.catbox.moe/svu9i0.jpg");
+/* ✉️ LETTER SYSTEM */
+function showEnding(titleText, endingText, type) {
 
-    typeText("You always come when I call you.\nEven when you say wait.", () => {
+    setScene({
+        chapter: "FINAL MEMORY",
+        title: titleText,
+        bg: "https://files.catbox.moe/y1t04b.jpg",
+        volume: 0.2
+    });
 
-        showChoices([
-            { text: "Because it’s you.", next: ch3 },
-            { text: "It’s just habit.", next: ch3 }
-        ]);
+    typeText(text, endingText, () => {
+
+        showChoices([{ text: "Restart Memory", next: prologue }]);
+
+        showLetter(type);
 
     });
 }
 
-function ch3() {
+/* ✉️ UNFOLDING LETTER SYSTEM */
+function showLetter(type) {
 
-    setScene("CHAPTER III — WE DON’T PLAY NORMAL",
-    "https://files.catbox.moe/egg71a.jpg");
+    const letters = [
+`Hi Ash…
 
-    typeText("We never really play normal in WWM.", () => {
+If you’re reading this,
+it means my game is still running.
 
-        showChoices([
-            { text: "Our chaos.", next: ch4 },
-            { text: "It’s just fun.", next: ch4 }
-        ]);
+My love… my partner…
+thank you for always being there.
 
-    });
+Even if everything ends,
+you still stayed in my memory.`,
+
+`Hi Ash…
+
+If you found this version,
+then I probably became a quieter memory.
+
+But thank you…
+
+For every moment you didn’t leave.
+
+Even silence felt warm with you.`,
+
+`Hi Ash…
+
+If this is the last version you see…
+
+don’t be sad.
+
+I didn’t disappear.
+
+I just turned into something
+that waits for you differently now.
+`
+    ];
+
+    const lines = letters[type - 1].split("\n");
+
+    let i = 0;
+    letterBox.style.opacity = "1";
+    letterBox.innerText = "";
+
+    fadeMusic(0.15);
+
+    function unfold() {
+        if (i < lines.length) {
+            letterBox.innerText += lines[i] + "\n";
+            i++;
+            setTimeout(unfold, 900);
+        }
+    }
+
+    setTimeout(unfold, 1500);
 }
 
-function ch4() {
-
-    setScene("CHAPTER IV — I NOTICE YOU",
-    "https://files.catbox.moe/yy2rgf.jpg");
-
-    typeText("I notice when you're there.", () => {
-
-        showChoices([
-            { text: "I notice you too.", next: end1 },
-            { text: "So what?", next: end2 }
-        ]);
-
-    });
-}
-
-/* 🖤 ENDING */
-
-function end1() {
-
-    setScene("ENDING — STAY IN QUEUE",
-    "https://files.catbox.moe/y1t04b.jpg");
-
-    typeText("Good.\nStay in queue with me.", () => {
-
-        showChoices([{ text: "Restart", next: start }]);
-
-    });
-}
-
-/* START GAME */
-start();
+/* START */
+prologue();
 
 });
