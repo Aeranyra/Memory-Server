@@ -40,7 +40,6 @@ document.addEventListener("click", () => {
 
 /* 🌌 SCENE */
 function setScene(data) {
-function setScene(data) {
 
     skipTyping = true;
 
@@ -253,8 +252,6 @@ function showEnding(titleText, endingText, type) {
     });
 }
         
-function showEndButtons(type) {
-
 function showEndButtons(type) {
 
     const endButtons = document.getElementById("endButtons");
