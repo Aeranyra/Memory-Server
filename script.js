@@ -40,9 +40,10 @@ document.addEventListener("click", () => {
 /* 🌌 SCENE */
 function setScene(data) {
 
+    /* 🚫 HARD RESET STATE */
     skipTyping = true;
+    isTyping = false;
 
-    /* 🧹 FULL RESET */
     choicesBox.innerHTML = "";
     text.innerText = "";
     letterBox.innerText = "";
@@ -64,7 +65,6 @@ function setScene(data) {
 
     }, 350);
 }
-
 /* ⌨️ TYPEWRITER FIXED */
 function typeText(target, txt, cb) {
 
@@ -249,12 +249,11 @@ function showEnding(titleText, endingText, type) {
 
         showChoices([{ text: "Restart Memory", next: prologue }]);
 
-        setTimeout(() => { if (letterBox.innerText === "") {
-        showLetter(type); }
+        setTimeout(() => {
+    if (!letterBox.innerText || letterBox.innerText.length === 0) {
+        showLetter(type);
+    }
 }, 1800);
-
-    });
-}
 
 /* ✉️ LETTER */
 function showLetter(type) {
