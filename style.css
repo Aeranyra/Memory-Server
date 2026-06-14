@@ -87,7 +87,7 @@ body {
     transform: scale(1.03);
 }
 
-/* 🦋 BUTTERFLY CURSOR */
+/* 🦋 BUTTERFLY */
 .butterfly {
     position: absolute;
     width: 8px;
@@ -119,6 +119,6 @@ body {
     color: #cfd6ff;
 
     opacity: 0;
-    transition: opacity 2s ease;
     white-space: pre-line;
+    transition: opacity 2s ease;
 }
