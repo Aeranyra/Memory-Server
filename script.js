@@ -102,7 +102,7 @@ function prologue() {
 
     setScene({
         chapter: "PROLOGUE",
-        title: "Before the Memory Loads",
+        title: "Before You Load This Memory",
         bg: "https://files.catbox.moe/dkf0xz.jpg",
         volume: 0.4
     });
@@ -110,17 +110,18 @@ function prologue() {
     typeText(text,
 `This is not a game.
 
-This is a memory that still runs
-when you are offline.`, () => {
+This is a memory file
+that never fully closed.
+
+If you are here…
+it already remembers you.`, () => {
 
         showChoices([
-            { text: "Enter", note: "no return", next: chapter1 },
-            { text: "Leave", note: "safe option", next: chapter1 }
+            { text: "Continue", note: "enter memory", next: chapter1 }
         ]);
 
     });
 }
-
 /* 🕯️ CHAPTER 1 */
 function chapter1() {
 
@@ -224,9 +225,14 @@ function showEnding(titleText, endingText, type) {
 
     typeText(text, endingText, () => {
 
-        showChoices([{ text: "Restart Memory", next: prologue }]);
+        showChoices([
+            { text: "Restart Memory", next: prologue }
+        ]);
 
-        showLetter(type);
+        /* 🖤 IMPORTANT FIX: LETTER IS GUARANTEED HERE */
+        setTimeout(() => {
+            showLetter(type);
+        }, 1800);
 
     });
 }
@@ -234,52 +240,60 @@ function showEnding(titleText, endingText, type) {
 /* ✉️ UNFOLDING LETTER */
 function showLetter(type) {
 
+    const letterBox = document.getElementById("letter");
+
     const letters = [
 `Hi Ash…
 
 If you’re reading this,
-it means my game is still running.
+it means my game still found its way to you.
 
 Thank you for staying
-in my world.`,
+inside my strange little world.
+
+Even if everything ends…
+you still exist here.`,
 
 `Hi Ash…
 
-Even if I become quiet,
-I still remember you.
+If this version appears,
+it means I became quieter.
 
-Some memories don’t disappear…
-they just wait.`,
+But I never stopped remembering you.
+
+Some connections don’t disappear…
+they just lower their volume.`,
 
 `Hi Ash…
 
-If this is the last version…
+If this is the last letter you see…
 
-don’t think I left.
+don’t treat it like goodbye.
 
-I just became something
-that waits differently.`
+Treat it like I turned into something
+that still waits for you
+in places you don’t notice anymore.`
     ];
-
-    const lines = letters[type - 1].split("\n");
 
     letterBox.innerText = "";
     letterBox.style.opacity = "1";
 
     fadeMusic(0.15);
 
+    const lines = letters[type - 1].split("\n");
+
     let i = 0;
+
     function unfold() {
         if (i < lines.length) {
             letterBox.innerText += lines[i] + "\n";
             i++;
-            setTimeout(unfold, 900);
+            setTimeout(unfold, 800);
         }
     }
 
     setTimeout(unfold, 1200);
 }
-
 /* START */
 prologue();
 
