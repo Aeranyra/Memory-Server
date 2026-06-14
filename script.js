@@ -81,10 +81,17 @@ function setScene(data) {
 
 /* ⌨️ TYPEWRITER */
 function typeText(target, txt, cb) {
+function typeText(target, txt, cb) {
 
     target.innerText = "";
     isTyping = true;
     skipTyping = false;
+
+    /* 🧠 normalize spacing */
+    txt = txt
+        .replace(/\n/g, "\n")
+        .replace(/ +/g, " ")
+        .trim();
 
     let i = 0;
 
