@@ -258,6 +258,16 @@ function showEnding(titleText, endingText, type) {
 /* ✉️ LETTER */
 function showLetter(type) {
 
+    const letterBox = document.getElementById("letter");
+
+    const letterBG = [
+        "https://files.catbox.moe/9dilmq.jpg",
+        "https://files.catbox.moe/zsbszl.jpg",
+        "https://files.catbox.moe/kwbaqr.jpg"
+    ];
+
+    bg.style.backgroundImage = `url(${letterBG[type - 1]})`;
+
     const letters = [
 `Hi Ash…
 
@@ -277,19 +287,19 @@ it means I became quieter.
 But I never stopped remembering you.
 
 Some connections don’t disappear…
-they just turn into memory.`,
+they just fade into distance.`,
 
 `Hi Ash…
 
-If this is the last letter you see…
+If this is the last part you see…
 
 don’t think of it as goodbye.
 
 Think of it as me
-still existing somewhere in WWM…
+still existing inside your memory…
 
-waiting in a different way.`
-];
+where I never really left.`
+    ];
 
     letterBox.innerText = "";
     letterBox.style.opacity = "1";
