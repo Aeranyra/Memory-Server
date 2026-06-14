@@ -6,6 +6,7 @@ body {
     color: #e8e8ff;
 }
 
+/* 🌌 BACKGROUND */
 #bg {
     position: fixed;
     inset: 0;
@@ -13,29 +14,39 @@ body {
     background-position: center;
     transition: 1s ease;
     filter: brightness(0.6);
+    z-index: -3;
 }
 
+/* 🌫️ OVERLAY */
 #overlay {
     position: fixed;
     inset: 0;
     background: radial-gradient(circle, rgba(20,20,40,0.2), black);
+    z-index: -2;
 }
 
+/* 🌑 FADE TRANSITION */
 #fade {
     position: fixed;
     inset: 0;
     background: black;
     opacity: 0;
     transition: 0.6s ease;
+    pointer-events: none;
+    z-index: 10;
 }
 
+/* 🎬 SCENE HOLDER */
 #scene {
     position: absolute;
     width: 100%;
     top: 25%;
     text-align: center;
+    z-index: 2;
+    transition: opacity 0.6s ease;
 }
 
+/* 🕯️ CHAPTER TEXT */
 #chapter {
     font-size: 13px;
     letter-spacing: 4px;
@@ -43,20 +54,26 @@ body {
     color: #9bb6ff;
 }
 
+/* 🌙 TITLE */
 #title {
     font-size: 22px;
     margin-top: 10px;
 }
 
+/* 💬 MAIN TEXT */
 #text {
     margin-top: 20px;
     font-size: 16px;
     max-width: 700px;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
     line-height: 1.6;
+
     white-space: pre-wrap;
+    word-break: break-word;
 }
 
+/* 💭 CHOICES */
 #choices {
     position: absolute;
     bottom: 120px;
@@ -65,8 +82,10 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    z-index: 5;
 }
 
+/* 🖤 CHOICE BUTTON */
 .choice {
     width: 70%;
     max-width: 500px;
@@ -76,17 +95,19 @@ body {
     border-radius: 10px;
     cursor: pointer;
     transition: 0.3s;
+    text-align: center;
 }
 
 .choice:hover {
     transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(120,140,255,0.3);
 }
 
+/* ✉️ HIDDEN LETTER */
 #letter {
     position: fixed;
     bottom: 180px;
     width: 100%;
-    text-align: center;
     max-width: 700px;
     margin: auto;
     left: 0;
@@ -99,4 +120,24 @@ body {
     opacity: 0;
     white-space: pre-line;
     transition: opacity 2s ease;
+    text-align: center;
+
+    z-index: 6;
+}
+
+/* 🦋 OPTIONAL BUTTERFLY EFFECT */
+.butterfly {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, #aab6ff, transparent);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: fadeout 1s linear forwards;
+    z-index: 20;
+}
+
+@keyframes fadeout {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
 }
