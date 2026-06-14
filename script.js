@@ -40,12 +40,12 @@ document.addEventListener("click", () => {
 
 /* 🌌 SCENE */
 function setScene(data) {
+function setScene(data) {
 
-    /* 🚫 HARD RESET STATE */
     skipTyping = true;
-    isTyping = false;
 
     choicesBox.innerHTML = "";
+    endButtons.innerHTML = "";   // ✅ ADD THIS (IMPORTANT)
     text.innerText = "";
     letterBox.innerText = "";
     letterBox.style.opacity = "0";
@@ -248,12 +248,16 @@ function showEnding(titleText, endingText, type) {
 
     typeText(text, endingText, () => {
 
-        showEndButtons(type);
+        showEndButtons(type); // ✅ THIS MUST RUN
 
     });
 }
         
 function showEndButtons(type) {
+
+function showEndButtons(type) {
+
+    const endButtons = document.getElementById("endButtons");
 
     endButtons.innerHTML = "";
 
