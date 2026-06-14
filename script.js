@@ -263,8 +263,6 @@ function showLetter(type) {
     chapter.innerText = "";
     title.innerText = "";
 
-    const letterBox = document.getElementById("letter");
-
     const letterBG = [
         "https://files.catbox.moe/9dilmq.jpg",
         "https://files.catbox.moe/zsbszl.jpg",
