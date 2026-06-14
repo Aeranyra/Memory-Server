@@ -1,3 +1,5 @@
+let isTyping = false;
+let skipTyping = false;
 document.addEventListener("DOMContentLoaded", () => {
 
 const bg = document.getElementById("bg");
@@ -48,40 +50,65 @@ document.addEventListener("click", () => {
 /* 🌌 SCENE SYSTEM */
 function setScene(data) {
 
+    /* 🚫 STOP ANY ONGOING TEXT */
+    skipTyping = true;
+
+    /* 🌫 FADE IN */
     fade.style.opacity = 1;
 
     setTimeout(() => {
 
-        chapter.innerText = data.chapter;
-        title.innerText = data.title;
+        /* 🧹 CLEAR ALL TEXT PROPERLY */
+        chapter.innerText = "";
+        title.innerText = "";
         text.innerText = "";
+
+        /* 🌙 UPDATE SCENE */
+        chapter.innerText = data.chapter || "";
+        title.innerText = data.title || "";
 
         bg.style.backgroundImage = `url(${data.bg})`;
 
+        /* 🎧 MUSIC CONTROL */
         targetVolume = data.volume ?? 0.5;
         fadeMusic(targetVolume);
 
+        /* 🌫 FADE OUT */
         fade.style.opacity = 0;
 
-    }, 400);
+    }, 350);
 }
 
 /* ⌨️ TYPEWRITER */
 function typeText(target, txt, cb) {
+
     target.innerText = "";
+    isTyping = true;
+    skipTyping = false;
+
     let i = 0;
 
     function run() {
+
+        if (skipTyping) {
+            target.innerText = txt;
+            isTyping = false;
+            cb?.();
+            return;
+        }
+
         if (i < txt.length) {
             target.innerText += txt[i];
             i++;
             setTimeout(run, 15);
-        } else cb?.();
+        } else {
+            isTyping = false;
+            cb?.();
+        }
     }
 
     run();
 }
-
 /* 💬 CHOICES */
 function showChoices(list) {
     choicesBox.innerHTML = "";
