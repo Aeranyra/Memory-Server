@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 const bg = document.getElementById("bg");
 const chapter = document.getElementById("chapter");
 const textBox = document.getElementById("text");
@@ -5,12 +7,12 @@ const choicesBox = document.getElementById("choices");
 const music = document.getElementById("music");
 const fade = document.getElementById("fade");
 
-/* 🎧 SINGLE MUSIC (YOUR TRACK) */
+/* 🎧 MUSIC (your track) */
 music.src = "https://files.catbox.moe/kpq69l.mp3";
 music.loop = true;
 music.volume = 0.5;
 
-/* 🌌 SCENE SYSTEM */
+/* 🌌 SCENE */
 function setScene(title, img) {
 
     fade.style.opacity = 1;
@@ -18,13 +20,10 @@ function setScene(title, img) {
     setTimeout(() => {
 
         chapter.innerText = title;
-
         chapter.style.opacity = 1;
         chapter.style.transform = "translateY(0)";
 
         bg.style.backgroundImage = `url(${img})`;
-
-        /* slow cinematic zoom */
         bg.style.transform = "scale(1.08)";
 
         fade.style.opacity = 0;
@@ -32,7 +31,7 @@ function setScene(title, img) {
     }, 600);
 }
 
-/* ⌨️ TYPEWRITER */
+/* ⌨️ TYPE */
 function typeText(text, cb) {
 
     textBox.innerHTML = "";
@@ -78,11 +77,12 @@ function showChoices(list) {
     });
 }
 
-/* 🌙 STORY */
-
+/* 🎮 STORY START (FIXED AUTOPLAY) */
 function start() {
 
-    music.play().catch(()=>{});
+    document.addEventListener("click", () => {
+        music.play().catch(()=>{});
+    }, { once: true });
 
     setScene("CHAPTER I — YOU OPENED THIS",
     "https://files.catbox.moe/dkf0xz.jpg");
@@ -96,6 +96,8 @@ function start() {
 
     });
 }
+
+/* 🌙 CHAPTERS */
 
 function ch2() {
 
@@ -156,4 +158,7 @@ function end1() {
     });
 }
 
+/* START GAME */
 start();
+
+});
