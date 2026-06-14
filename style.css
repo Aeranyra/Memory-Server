@@ -102,7 +102,30 @@ body {
     transform: scale(1.03);
     box-shadow: 0 0 15px rgba(120,140,255,0.3);
 }
+#endButtons {
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    z-index: 10;
+}
 
+.endBtn {
+    padding: 12px 20px;
+    border-radius: 10px;
+    background: rgba(40,40,80,0.6);
+    border: 1px solid rgba(120,120,255,0.3);
+    color: #e8e8ff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.endBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(120,140,255,0.3);
+}
 /* ✉️ HIDDEN LETTER */
 #letter {
     position: fixed;
