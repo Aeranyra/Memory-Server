@@ -42,13 +42,18 @@ function setScene(data) {
 
     skipTyping = true;
 
+    /* 🧹 FULL RESET */
+    choicesBox.innerHTML = "";
+    text.innerText = "";
+    letterBox.innerText = "";
+    letterBox.style.opacity = "0";
+
     fade.style.opacity = 1;
 
     setTimeout(() => {
 
         chapter.innerText = data.chapter;
         title.innerText = data.title;
-        text.innerText = "";
 
         bg.style.backgroundImage = `url(${data.bg})`;
 
@@ -109,6 +114,9 @@ function showChoices(list) {
 
 /* 🌙 PROLOGUE */
 function prologue() {
+
+    choicesBox.innerHTML = "";
+    letterBox.innerText = "";
 
     setScene({
         chapter: "PROLOGUE",
@@ -241,7 +249,9 @@ function showEnding(titleText, endingText, type) {
 
         showChoices([{ text: "Restart Memory", next: prologue }]);
 
-        setTimeout(() => showLetter(type), 1800);
+        setTimeout(() => { if (letterBox.innerText === "") {
+        showLetter(type); }
+}, 1800);
 
     });
 }
