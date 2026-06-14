@@ -9,6 +9,7 @@ const music = document.getElementById("music");
 const fade = document.getElementById("fade");
 const letterBox = document.getElementById("letter");
 const endButtons = document.getElementById("endButtons");
+
 let isTyping = false;
 let skipTyping = false;
 
@@ -248,6 +249,9 @@ function showEnding(titleText, endingText, type) {
     typeText(text, endingText, () => {
 
         showEndButtons(type);
+
+    });
+}
         
 function showEndButtons(type) {
 
@@ -271,8 +275,6 @@ function showEndButtons(type) {
 
     endButtons.appendChild(restartBtn);
     endButtons.appendChild(letterBtn);
-}
-    });
 }
 /* ✉️ LETTER */
 function showLetter(type) {
