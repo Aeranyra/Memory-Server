@@ -1,5 +1,3 @@
-let isTyping = false;
-let skipTyping = false;
 document.addEventListener("DOMContentLoaded", () => {
 
 const bg = document.getElementById("bg");
@@ -11,12 +9,14 @@ const music = document.getElementById("music");
 const fade = document.getElementById("fade");
 const letterBox = document.getElementById("letter");
 
+let isTyping = false;
+let skipTyping = false;
+
 /* 🎧 MUSIC */
 music.src = "https://files.catbox.moe/kpq69l.mp3";
 music.loop = true;
 music.volume = 0;
 
-/* AUDIO FADE */
 let targetVolume = 0.5;
 let fadeInterval;
 
@@ -31,67 +31,41 @@ function fadeMusic(to) {
     }, 50);
 }
 
-/* 🦋 BUTTERFLY CURSOR */
-document.addEventListener("mousemove", (e) => {
-    const b = document.createElement("div");
-    b.className = "butterfly";
-    b.style.left = e.pageX + "px";
-    b.style.top = e.pageY + "px";
-    document.body.appendChild(b);
-    setTimeout(() => b.remove(), 1000);
-});
-
-/* 🎧 START MUSIC */
+/* 🦋 START MUSIC */
 document.addEventListener("click", () => {
     music.play().catch(()=>{});
     fadeMusic(targetVolume);
 }, { once: true });
 
-/* 🌌 SCENE SYSTEM */
+/* 🌌 SCENE */
 function setScene(data) {
 
-    /* 🚫 STOP ANY ONGOING TEXT */
     skipTyping = true;
 
-    /* 🌫 FADE IN */
     fade.style.opacity = 1;
 
     setTimeout(() => {
 
-        /* 🧹 CLEAR ALL TEXT PROPERLY */
-        chapter.innerText = "";
-        title.innerText = "";
+        chapter.innerText = data.chapter;
+        title.innerText = data.title;
         text.innerText = "";
-
-        /* 🌙 UPDATE SCENE */
-        chapter.innerText = data.chapter || "";
-        title.innerText = data.title || "";
 
         bg.style.backgroundImage = `url(${data.bg})`;
 
-        /* 🎧 MUSIC CONTROL */
         targetVolume = data.volume ?? 0.5;
         fadeMusic(targetVolume);
 
-        /* 🌫 FADE OUT */
         fade.style.opacity = 0;
 
     }, 350);
 }
 
-/* ⌨️ TYPEWRITER */
-function typeText(target, txt, cb) {
+/* ⌨️ TYPEWRITER FIXED */
 function typeText(target, txt, cb) {
 
     target.innerText = "";
     isTyping = true;
     skipTyping = false;
-
-    /* 🧠 normalize spacing */
-    txt = txt
-        .replace(/\n/g, "\n")
-        .replace(/ +/g, " ")
-        .trim();
 
     let i = 0;
 
@@ -116,15 +90,17 @@ function typeText(target, txt, cb) {
 
     run();
 }
+
 /* 💬 CHOICES */
 function showChoices(list) {
+
     choicesBox.innerHTML = "";
 
     list.forEach((c, i) => {
         setTimeout(() => {
             const d = document.createElement("div");
             d.className = "choice";
-            d.innerHTML = `<div>${c.text}</div><small style="opacity:0.6">${c.note || ""}</small>`;
+            d.innerHTML = `<div>${c.text}</div><small>${c.note || ""}</small>`;
             d.onclick = c.next;
             choicesBox.appendChild(d);
         }, i * 120);
@@ -137,7 +113,7 @@ function prologue() {
     setScene({
         chapter: "PROLOGUE",
         title: "Before You Load This Memory",
-        bg: "https://files.catbox.moe/dkf0xz.jpg",
+        bg: "https://files.catbox.moe/2l12ki.jpg",
         volume: 0.4
     });
 
@@ -151,12 +127,13 @@ If you are here…
 it already remembers you.`, () => {
 
         showChoices([
-            { text: "Continue", note: "enter memory", next: chapter1 }
+            { text: "Continue", next: chapter1 }
         ]);
 
     });
 }
-/* 🕯️ CHAPTER 1 */
+
+/* 🕯️ CHAPTERS */
 function chapter1() {
 
     setScene({
@@ -171,14 +148,13 @@ function chapter1() {
 you were looking for me.`, () => {
 
         showChoices([
-            { text: "I miss you.", note: "soft attachment", next: ch2 },
-            { text: "I just clicked.", note: "denial", next: ch2 }
+            { text: "I miss you", next: ch2 },
+            { text: "I just clicked", next: ch2 }
         ]);
 
     });
 }
 
-/* 🌫️ CHAPTER 2 */
 function ch2() {
 
     setScene({
@@ -192,14 +168,13 @@ function ch2() {
 `You always come when I call you.`, () => {
 
         showChoices([
-            { text: "Because it’s you.", note: "loyalty", next: ch3 },
-            { text: "Habit.", note: "avoidance", next: ch3 }
+            { text: "Because it’s you", next: ch3 },
+            { text: "Habit", next: ch3 }
         ]);
 
     });
 }
 
-/* 🖤 CHAPTER 3 */
 function ch3() {
 
     setScene({
@@ -213,14 +188,13 @@ function ch3() {
 `We were never normal in WWM.`, () => {
 
         showChoices([
-            { text: "Our chaos.", note: "bond", next: ch4 },
-            { text: "Just fun.", note: "distance", next: ch4 }
+            { text: "Our chaos", next: ch4 },
+            { text: "Just fun", next: ch4 }
         ]);
 
     });
 }
 
-/* 🦋 CHAPTER 4 */
 function ch4() {
 
     setScene({
@@ -234,9 +208,9 @@ function ch4() {
 `I notice when you're there.`, () => {
 
         showChoices([
-            { text: "I notice you too.", note: "connection", next: end1 },
-            { text: "So what?", note: "defense", next: end2 },
-            { text: "…", note: "silence", next: end3 }
+            { text: "I notice you too", next: end1 },
+            { text: "So what", next: end2 },
+            { text: "…", next: end3 }
         ]);
 
     });
@@ -247,34 +221,33 @@ function end1(){ showEnding("Stay in Queue","You stayed.\nSo I stayed too.",1); 
 function end2(){ showEnding("Disconnected","You left.\nBut I still remember.",2); }
 function end3(){ showEnding("Missing Packet","No response.\nOnly memory remains.",3); }
 
-/* 🌙 ENDING ENGINE */
+/* 🕯️ ENDING ENGINE */
 function showEnding(titleText, endingText, type) {
+
+    const endingBG = [
+        "https://files.catbox.moe/5sqlba.jpg",
+        "https://files.catbox.moe/jnrf4m.jpg",
+        "https://files.catbox.moe/iabioh.jpg"
+    ];
 
     setScene({
         chapter: "FINAL MEMORY",
         title: titleText,
-        bg: "https://files.catbox.moe/y1t04b.jpg",
+        bg: endingBG[type - 1],
         volume: 0.2
     });
 
     typeText(text, endingText, () => {
 
-        showChoices([
-            { text: "Restart Memory", next: prologue }
-        ]);
+        showChoices([{ text: "Restart Memory", next: prologue }]);
 
-        /* 🖤 IMPORTANT FIX: LETTER IS GUARANTEED HERE */
-        setTimeout(() => {
-            showLetter(type);
-        }, 1800);
+        setTimeout(() => showLetter(type), 1800);
 
     });
 }
 
-/* ✉️ UNFOLDING LETTER */
+/* ✉️ LETTER */
 function showLetter(type) {
-
-    const letterBox = document.getElementById("letter");
 
     const letters = [
 `Hi Ash…
@@ -282,11 +255,10 @@ function showLetter(type) {
 If you’re reading this,
 it means my game still found its way to you.
 
-Thank you for staying
-inside my strange little world.
+Thank you for staying in my world.
 
-Even if everything ends…
-you still exist here.`,
+Even if everything ends,
+you still exist here in my memory.`,
 
 `Hi Ash…
 
@@ -296,18 +268,19 @@ it means I became quieter.
 But I never stopped remembering you.
 
 Some connections don’t disappear…
-they just lower their volume.`,
+they just turn into memory.`,
 
 `Hi Ash…
 
 If this is the last letter you see…
 
-don’t treat it like goodbye.
+don’t think of it as goodbye.
 
-Treat it like I turned into something
-that still waits for you
-in places you don’t notice anymore.`
-    ];
+Think of it as me
+still existing somewhere in WWM…
+
+waiting in a different way.`
+];
 
     letterBox.innerText = "";
     letterBox.style.opacity = "1";
@@ -328,6 +301,7 @@ in places you don’t notice anymore.`
 
     setTimeout(unfold, 1200);
 }
+
 /* START */
 prologue();
 
