@@ -231,7 +231,6 @@ function end3(){ showEnding("Missing Packet","No response.\nOnly memory remains.
 
 /* 🕯️ ENDING ENGINE */
 function showEnding(titleText, endingText, type) {
-function showEnding(titleText, endingText, type) {
 
     const endingBG = [
         "https://files.catbox.moe/5sqlba.jpg",
@@ -250,12 +249,11 @@ function showEnding(titleText, endingText, type) {
 
         showChoices([
             { text: "Restart Memory", next: prologue },
-            { text: "Open Hidden Letter", next: () => showLetter(type) }
+            { text: "Open Hidden Letter", next: function () { showLetter(type); } }
         ]);
 
     });
 }
-
 /* ✉️ LETTER */
 function showLetter(type) {
 
